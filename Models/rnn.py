@@ -4,6 +4,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.models import Sequential
 from keras.layers import Dense, Embedding, SimpleRNN, SpatialDropout1D
 from keras import optimizers
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, classification_report, confusion_matrix
 import numpy as np
 
 from common import trainTestSplitdf,extractContentSentimentCategoryForSample,preprocessData
@@ -55,7 +56,7 @@ if __name__ == '__main__':
     # model.add(Embedding(max_features, embed_dim,input_length = X.shape[1]))
     model.add(Embedding(max_features, embed_dim, input_length=X.shape[1], weights=[embedding_matrix], trainable=False))
     model.add(SpatialDropout1D(0.2))
-    model.add(SimpleRNN(units=3, input_shape=(X_train.shape[0], X_train.shape[1])))
+    model.add(SimpleRNN(units=4, input_shape=(X_train.shape[0], X_train.shape[1])))
     # model.add(Dense(50,activation='relu'))
     model.add(Dense(13,activation='softmax'))
     model.compile(loss = 'categorical_crossentropy', optimizer=adam,metrics = ['accuracy'])
@@ -74,10 +75,17 @@ if __name__ == '__main__':
     # training
     
     batch_size = 8
-    history=model.fit(X_train, Y_train, epochs = 500, batch_size=batch_size, verbose = 2,validation_data=(X_validate,Y_validate))
+    history=model.fit(X_train, Y_train, epochs = 2, batch_size=batch_size, verbose = 2,validation_data=(X_validate,Y_validate))
 
     #testing
 
     score,acc = model.evaluate(X_test, Y_test, verbose = 2, batch_size = batch_size)
     print("score: %.2f" % (score))
     print("acc: %.2f" % (acc))
+    Y_pred=model.predict(X_test)
+    print(Y_pred)
+    print(accuracy_score(Y_test.argmax(axis=1), Y_pred.argmax(axis=1)))
+    print(f1_score(Y_test.argmax(axis=1), Y_pred.argmax(axis=1), average="macro"))
+    print(precision_score(Y_test.argmax(axis=1), Y_pred.argmax(axis=1), average="macro"))
+    print(recall_score(Y_test.argmax(axis=1), Y_pred.argmax(axis=1), average="macro"))
+    print(confusion_matrix(Y_test.argmax(axis=1),Y_pred.argmax(axis=1)))
