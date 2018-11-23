@@ -4,6 +4,7 @@ from keras.preprocessing.sequence import pad_sequences
 from keras.models import Sequential
 from keras.layers import Dense, Embedding, LSTM, SpatialDropout1D
 from keras import optimizers
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, classification_report, confusion_matrix
 import numpy as np
 
 from common import trainTestSplitdf,extractContentSentimentCategoryForSample,preprocessData
@@ -55,7 +56,7 @@ if __name__ == '__main__':
     model = Sequential()
     # model.add(Embedding(max_features, embed_dim,input_length = X.shape[1]))
     model.add(Embedding(max_features, embed_dim, input_length=X.shape[1], weights=[embedding_matrix], trainable=False))
-    model.add(SpatialDropout1D(0.2))
+    # model.add(SpatialDropout1D(0.2))
     model.add(LSTM(lstm_out, dropout=0.2, recurrent_dropout=0.2))
     # model.add(Dense(128,activation='relu'))
     model.add(Dense(13,activation='softmax'))
@@ -75,8 +76,8 @@ if __name__ == '__main__':
     # training
     
     batch_size = 32
-    history=model.fit(X_train, Y_train, epochs = 300, batch_size=batch_size, verbose = 2,validation_data=(X_validate,Y_validate))
-    model.save("lstm.h5")
+    history=model.fit(X_train, Y_train, epochs = 20, batch_size=batch_size, verbose = 2,validation_data=(X_validate,Y_validate))
+    # model.save("lstm.h5")
     #testing
 
     score,acc = model.evaluate(X_test, Y_test, verbose = 2, batch_size = batch_size)
@@ -89,3 +90,28 @@ if __name__ == '__main__':
     print(precision_score(Y_test.argmax(axis=1), Y_pred.argmax(axis=1), average="macro"))
     print(recall_score(Y_test.argmax(axis=1), Y_pred.argmax(axis=1), average="macro"))
     print(confusion_matrix(Y_test.argmax(axis=1),Y_pred.argmax(axis=1)))
+
+    print("--Test matrices--")
+    print("accuracy")
+    print(accuracy_score(Y_test.argmax(axis=1), Y_pred.argmax(axis=1)))
+    print("f1_score")
+    print(f1_score(Y_test.argmax(axis=1), Y_pred.argmax(axis=1), average="macro"))
+    print("Precision_score")
+    print(precision_score(Y_test.argmax(axis=1), Y_pred.argmax(axis=1), average="macro"))
+    print("Recall_score")
+    print(recall_score(Y_test.argmax(axis=1), Y_pred.argmax(axis=1), average="macro"))
+    print("Confusion_matrix")
+    print(confusion_matrix(Y_test.argmax(axis=1),Y_pred.argmax(axis=1)))
+
+    print("--Train matrices--")
+    y_pred_train = model.predict(X_train)
+    print("accuracy")
+    print(accuracy_score(Y_train.argmax(axis=1), y_pred_train.argmax(axis=1)))
+    print("f1_score")
+    print(f1_score(Y_train.argmax(axis=1), y_pred_train.argmax(axis=1), average="macro"))
+    print("Precision_score")
+    print(precision_score(Y_train.argmax(axis=1), y_pred_train.argmax(axis=1), average="macro"))
+    print("Recall_score")
+    print(recall_score(Y_train.argmax(axis=1), y_pred_train.argmax(axis=1), average="macro"))
+    print("Confusion_matrix")
+    print(confusion_matrix(Y_train.argmax(axis=1),y_pred_train.argmax(axis=1)))
