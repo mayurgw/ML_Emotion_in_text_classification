@@ -4,7 +4,7 @@ Emotions are an essential part of our everyday life. Emotions have the ability t
 
 ## Techniques being explored: 
 ---
-We start with traditional non-neural network classifiers Naive Bayes and XGboost. Further, we will explore how they compare with Convolution neural networks and Long short-term memory networks(LSTMs).
+We start with traditional non-neural network classifiers Naive Bayes, Logistic regression and SVM. Further, we explore how they compare with Recurrent neural networks and Long short-term memory networks(LSTMs).
 
 ## Dataset: 
 ---
@@ -17,3 +17,7 @@ https://www.analyticsvidhya.com/blog/2018/04/a-comprehensive-guide-to-understand
 https://www.analyticsvidhya.com/blog/2017/01/ultimate-guide-to-understand-implement-natural-language-processing-codes-in-python/
 
 https://datascienceplus.com/multi-class-text-classification-with-scikit-learn/
+
+https://medium.com/@sabber/classifying-yelp-review-comments-using-lstm-and-word-embeddings-part-1-eb2275e4066b 
+
+https://scikit-learn.org/stable/ 

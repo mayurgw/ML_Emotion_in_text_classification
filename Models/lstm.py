@@ -50,16 +50,16 @@ if __name__ == '__main__':
     lstm_out = 64
 
     adam = optimizers.Adam(lr=0.01)
-    sgd = optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
+    # sgd = optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9, nesterov=True)
 
     model = Sequential()
     # model.add(Embedding(max_features, embed_dim,input_length = X.shape[1]))
     model.add(Embedding(max_features, embed_dim, input_length=X.shape[1], weights=[embedding_matrix], trainable=False))
     model.add(SpatialDropout1D(0.2))
     model.add(LSTM(lstm_out, dropout=0.2, recurrent_dropout=0.2))
-    # model.add(Dense(50,activation='relu'))
+    # model.add(Dense(128,activation='relu'))
     model.add(Dense(13,activation='softmax'))
-    model.compile(loss = 'categorical_crossentropy', optimizer=sgd,metrics = ['accuracy'])
+    model.compile(loss = 'categorical_crossentropy', optimizer='adam',metrics = ['accuracy'])
     print(model.summary())
 
 
@@ -75,8 +75,8 @@ if __name__ == '__main__':
     # training
     
     batch_size = 32
-    history=model.fit(X_train, Y_train, epochs = 500, batch_size=batch_size, verbose = 2,validation_data=(X_validate,Y_validate))
-
+    history=model.fit(X_train, Y_train, epochs = 300, batch_size=batch_size, verbose = 2,validation_data=(X_validate,Y_validate))
+    model.save("lstm.h5")
     #testing
 
     score,acc = model.evaluate(X_test, Y_test, verbose = 2, batch_size = batch_size)

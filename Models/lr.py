@@ -1,7 +1,7 @@
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.feature_extraction.text import TfidfTransformer
-from sklearn.naive_bayes import MultinomialNB
+from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score, classification_report, confusion_matrix
 import numpy as np
 
@@ -21,7 +21,7 @@ if __name__ == '__main__':
 	print(X_train_tfidf.shape)
 	print(y_train[0:10])
 	y_train=np.array(y_train)
-	clf = MultinomialNB().fit(X_train_tfidf, y_train)
+	clf = LogisticRegression(random_state=0, solver='lbfgs',multi_class='multinomial').fit(X_train_tfidf, y_train)
 
 
 	# count_vect = CountVectorizer()
